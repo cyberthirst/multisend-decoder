@@ -85,7 +85,7 @@ def decode_packed_transactions(payload: bytes):
             else "DELEGATECALL"
             if op == 1
             else f"UNKNOWN({op})",
-            "to": "https://etherscan.io/address/" + 0x" + to_bytes.hex(),
+            "to": "https://etherscan.io/address/" + "0x" + to_bytes.hex(),
             "value": value,
             "data_len": data_len,
             "calldata": "0x" + payload[data_start:data_end].hex(),
