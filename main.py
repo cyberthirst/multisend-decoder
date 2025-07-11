@@ -18,8 +18,8 @@ Each packed transaction
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Paste the FULL calldata (starting with 0x…) here:
-INPUT = ""
+# Path to file containing the FULL calldata (starting with 0x…)
+INPUT = "calldata.txt"
 
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -97,7 +97,14 @@ def decode_packed_transactions(payload: bytes):
 
 # --- main -------------------------------------------------------------------
 def main() -> None:
-    payload = strip_abi_envelope(INPUT)
+    try:
+        with open(INPUT, "r") as f:
+            calldata_hex = f.read().strip()
+    except FileNotFoundError:
+        print(f"Error: file '{INPUT}' not found.")
+        return
+
+    payload = strip_abi_envelope(calldata_hex)
 
     any_delegate = False
     for tx in decode_packed_transactions(payload):
@@ -111,9 +118,7 @@ def main() -> None:
             any_delegate = True
 
     if any_delegate:
-        print(
-            "⚠️  Warning: one or more DELEGATECALLs detected!"
-        )
+        print("⚠️  Warning: one or more DELEGATECALLs detected!")
 
 
 if __name__ == "__main__":
